@@ -1,10 +1,14 @@
 import rospy
 from std_msgs.msg import Int32
 
-rospy.init_node("sub_node")
+class Sub_class:
+    def __init__(self):
+        rospy.init_node("sub_node")
+        rospy.Subscriber("/counter",Int32,callback=self.callback)
 
-def callback(msg):
-    print(msg)
+    def callback(self,msg):
+        print(msg)
 
-rospy.Subscriber("/counter",Int32,callback=callback)
-rospy.spin()
+if __name__ == "__main__":
+    pub_node = Sub_class()
+    rospy.spin()
