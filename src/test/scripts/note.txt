@@ -1,8 +1,9 @@
 <about ros>
-https://gosury32.tistory.com/3
+https://velog.io/@tree_jhk/ROS-%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0
 
 <about velodyne>
-https://velog.io/@tree_jhk/ROS-%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0
+https://gosury32.tistory.com/3
+https://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20HDL-32E
 https://github.com/ros-drivers/velodyne/tree/master
 
 <catkin_make error>
