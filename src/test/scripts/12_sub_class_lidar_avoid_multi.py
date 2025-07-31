@@ -23,11 +23,13 @@ class Sub_class:
             degree_min + degree_increment * index
             for index, value in enumerate(msg.ranges)
         ]
-
         min_diff_minus_90 = inf
         min_diff_plus_90 = inf
         mid_space = 0
         mid_avg_degree = 0
+
+        #### find closest -90 & 90 idx ####
+
         for i, v in enumerate(msg.ranges):
 
             diff_minus_90 = abs(cal_degrees[i] + 90)  # Distance from -90 degrees
@@ -39,6 +41,8 @@ class Sub_class:
             if diff_plus_90 < min_diff_plus_90:
                 min_diff_plus_90 = diff_plus_90
                 closest_plus_90_idx = i
+
+        #### find mid gap ####
 
             if abs(cal_degrees[i]) < 45 and 0 < msg.ranges[i] < 3:
                 obstacle.append(i)
@@ -55,12 +59,17 @@ class Sub_class:
         if obstacle != []:
             print("장애물 있음")
 
+        #### calculate left space & right space ####
+
             left_space = closest_plus_90_idx - obstacle[-1]
             right_space = obstacle[0] - closest_minus_90_idx
 
             left_avg_degree = cal_degrees[(closest_plus_90_idx + obstacle[-1]) // 2]
             right_avg_degree = cal_degrees[(obstacle[0] + closest_minus_90_idx) // 2]
             print(left_avg_degree, right_avg_degree)
+
+        #### compare mid space & left space & right space ####
+
             if max([left_space, mid_space, right_space]) == left_space:
                 print("왼쪽 턴")
                 steer = radians(left_avg_degree)
@@ -77,14 +86,13 @@ class Sub_class:
             print("장애물 없음")
             self.cmd_msg.steering = 0.0
 
+        #### publish topic ####
+
         self.cmd_msg.accel = 0.1
         self.cmd_msg.brake = 0.0
         self.ctrl_pub.publish(self.cmd_msg)
 
         print("-" * 30)
-
-        # print(cal_degrees)
-
 
 def main():
 
