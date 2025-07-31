@@ -42,7 +42,8 @@ class Sub_class:
                 min_diff_plus_90 = diff_plus_90
                 closest_plus_90_idx = i
 
-        #### find mid gap & calculate mid steer ####
+        #### find mid gap & 
+        # calculate mid steer ####
 
             if abs(cal_degrees[i]) < 90 and 0 < msg.ranges[i] < 3:
                 obstacle.append(i)
