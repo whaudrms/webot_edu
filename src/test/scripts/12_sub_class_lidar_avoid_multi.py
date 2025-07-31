@@ -42,12 +42,12 @@ class Sub_class:
                 min_diff_plus_90 = diff_plus_90
                 closest_plus_90_idx = i
 
-        #### find mid gap ####
+        #### find mid gap & calculate mid steer ####
 
-            if abs(cal_degrees[i]) < 45 and 0 < msg.ranges[i] < 3:
+            if abs(cal_degrees[i]) < 90 and 0 < msg.ranges[i] < 3:
                 obstacle.append(i)
                 if len(obstacle) >= 2:
-                    if 100 < obstacle[-1] - obstacle[-2]:
+                    if 50 < obstacle[-1] - obstacle[-2]:
                         mid_space = obstacle[-1] - obstacle[-2]
                         mid_avg_degree = cal_degrees[(obstacle[-1] + obstacle[-2]) // 2]
                         print(obstacle)
@@ -59,7 +59,8 @@ class Sub_class:
         if obstacle != []:
             print("장애물 있음")
 
-        #### calculate left space & right space ####
+        #### find left space & right space 
+        #    calculate left steer & rught steer ####
 
             left_space = closest_plus_90_idx - obstacle[-1]
             right_space = obstacle[0] - closest_minus_90_idx
