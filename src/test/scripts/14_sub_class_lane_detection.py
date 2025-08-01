@@ -48,7 +48,7 @@ class Sub_class:
         bin_img = np.zeros_like(gray_warp_img)
         bin_img[gray_warp_img!=0] = 1
 
-        histogram = np.sum(bin_img,axis=0)                           # Convert Binary Image to Histogram
+        histogram = np.sum(bin_img,axis=0)                           # Convert Binary Image to Histogram # axis=0 -> Lane, axis=1 -> Stop Line
         histogram[histogram<100] = 0
         left_hist = histogram[0:x//2]                                
         right_hist = histogram[x//2:x]
@@ -56,18 +56,18 @@ class Sub_class:
         nonzero_right_index = np.nonzero(right_hist)[0]
 
         try:
-            left_avg_index = (nonzero_left_index[0]+nonzero_left_index[-1])//2                  # Calculate Left & Right lane index 
+            left_avg_index = (nonzero_left_index[0]+nonzero_left_index[-1])//2                  # **Calculate Left & Right lane index**
             right_avg_index = ((nonzero_right_index[0]+nonzero_right_index[-1])//2) + x//2
         except:
             left_avg_index = x//4
             right_avg_index = x*3//4
-        center_avg_index = (left_avg_index + right_avg_index)//2                                # Calculate Center lane index
+        center_avg_index = (left_avg_index + right_avg_index)//2                                # **Calculate Center lane index**
         cv2.line(bit_img, [center_avg_index,0],[center_avg_index,y],[0,255,0],7)
         cv2.line(bit_img, [x//2,0],[x//2,y],[0,0,255],3)
 
-        diff_center_index = x//2 - center_avg_index                                             # Calculate Steering
+        diff_center_index = x//2 - center_avg_index                                             # **Calculate Steering**
         P_gain = 0.5
-        steer = diff_center_index * (pi/x) * P_gain
+        steer = diff_center_index * (pi/x) * P_gain                                             # pi/x : index -> radian
         
         self.cmd_msg.accel = 0.2                                                                # Publish
         self.cmd_msg.steering = steer
