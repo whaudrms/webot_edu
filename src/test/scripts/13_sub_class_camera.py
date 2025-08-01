@@ -2,6 +2,7 @@ import rospy
 from sensor_msgs.msg import CompressedImage
 from cv_bridge import CvBridge
 import cv2
+import numpy as np
 
 class Sub_class:
     def __init__(self):
@@ -10,11 +11,14 @@ class Sub_class:
         self.bridge = CvBridge()
 
     def callback(self,msg=CompressedImage):
-        img = self.bridge.compressed_imgmsg_to_cv2(msg)     
+        img = self.bridge.compressed_imgmsg_to_cv2(msg)
+        hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)                    # h, s, v -> [0~179,0~255,0~255]
         # gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-
-        cv2.namedWindow("img",cv2.WINDOW_NORMAL) 
-        cv2.imshow("img",img)
+        self.view("img",img)
+     
+    def view(self,window_name,img):
+        cv2.namedWindow(window_name,cv2.WINDOW_NORMAL) 
+        cv2.imshow(window_name,img)
 
         if cv2.waitKey(1) == ord('q'):
             cv2.destroyAllWindows()

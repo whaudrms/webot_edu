@@ -11,3 +11,6 @@ rosdep install --from-paths src -i -y
 
 <F1tenth connection & joy>
 https://velog.io/@123whgmlwls/F1tenth-cysee4o6#2-ros-%ED%86%B5%EC%8B%A0-setup-%EB%85%B8%ED%8A%B8%EB%B6%81--jetson%EB%AA%A8%EB%8B%88%ED%84%B0%EC%99%80-%EC%97%B0%EA%B2%B0%ED%95%98%EC%97%AC-%EC%A7%84%ED%96%89
+
+<about color>
+https://github.com/WeGo-Robotics/erp42_sim_ws/blob/main/src/opencv_edu/scripts/9.cvt_color.py
