@@ -18,6 +18,9 @@ class Pub_node():
             self.rate.sleep()
 
 if __name__ == "__main__":
-    pub_node = Pub_node()
-    pub_node.main()
+    try:
+        pub_node = Pub_node()
+        pub_node.main()
+    except rospy.ROSInterruptException:
+        pass
 

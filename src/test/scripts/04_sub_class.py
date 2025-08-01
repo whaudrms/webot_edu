@@ -10,5 +10,8 @@ class Sub_class:
         print(msg)
 
 if __name__ == "__main__":
-    pub_node = Sub_class()
-    rospy.spin()
+    try:
+        sub_node = Sub_class()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass

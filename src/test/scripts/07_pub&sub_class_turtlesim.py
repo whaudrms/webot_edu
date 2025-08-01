@@ -26,5 +26,8 @@ class Sub_class:
         print(f"theta:{msg.theta}")
 
 if __name__ == "__main__":
-    pub_node = Sub_class()
-    rospy.spin()
+    try:
+        sub_node = Sub_class()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
