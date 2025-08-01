@@ -1,6 +1,8 @@
 import rospy
 from sensor_msgs.msg import CompressedImage
+from morai_msgs.msg import CtrlCmd
 from cv_bridge import CvBridge
+from math import *
 import cv2
 import numpy as np
 
@@ -8,7 +10,9 @@ class Sub_class:
     def __init__(self):
         rospy.init_node("sub_node")
         rospy.Subscriber("/image_jpeg/compressed",CompressedImage,callback=self.callback)
+        self.cmd_pub = rospy.Publisher('/ctrl_cmd_0',CtrlCmd,queue_size=10)
         self.bridge = CvBridge()
+        self.cmd_msg = CtrlCmd()
 
     def callback(self,msg=CompressedImage):
         img = self.bridge.compressed_imgmsg_to_cv2(msg)
@@ -46,25 +50,35 @@ class Sub_class:
 
         histogram = np.sum(bin_img,axis=0)                           # Convert Binary Image to Histogram
         histogram[histogram<100] = 0
-
-        left_hist = histogram[0:x//2]                                # Calculate Left & Right lane index 
+        left_hist = histogram[0:x//2]                                
         right_hist = histogram[x//2:x]
         nonzero_left_index = np.nonzero(left_hist)[0]                      
         nonzero_right_index = np.nonzero(right_hist)[0]
 
-        left_avg_index = (nonzero_left_index[0]+nonzero_left_index[-1])//2                  # Calculate Center lane index
-        right_avg_index = ((nonzero_right_index[0]+nonzero_right_index[-1])//2) + x//2
-        center_avg_index = (left_avg_index + right_avg_index)//2
-       
+        try:
+            left_avg_index = (nonzero_left_index[0]+nonzero_left_index[-1])//2                  # Calculate Left & Right lane index 
+            right_avg_index = ((nonzero_right_index[0]+nonzero_right_index[-1])//2) + x//2
+        except:
+            left_avg_index = x//4
+            right_avg_index = x*3//4
+        center_avg_index = (left_avg_index + right_avg_index)//2                                # Calculate Center lane index
+        cv2.line(bit_img, [center_avg_index,0],[center_avg_index,y],[0,255,0],7)
+        cv2.line(bit_img, [x//2,0],[x//2,y],[0,0,255],3)
 
-        print(center_avg_index)
+        diff_center_index = x//2 - center_avg_index                                             # Calculate Steering
+        P_gain = 0.5
+        steer = diff_center_index * (pi/x) * P_gain
+        
+        self.cmd_msg.accel = 0.2                                                                # Publish
+        self.cmd_msg.steering = steer
+        self.cmd_pub.publish(self.cmd_msg)
 
         # self.view("img",img)
         # self.view("masked_img",masked_img)
-        # self.view("bit_img",bit_img)
-        self.view("warp_img",warp_img)
+        self.view("bit_img",bit_img)
+        # self.view("warp_img",warp_img)
         self.view("gray_warp_img",gray_warp_img)
-        self.view("bin_img",bin_img)
+        # self.view("bin_img",bin_img)
 
     def view(self,window_name,img):
         cv2.namedWindow(window_name,cv2.WINDOW_NORMAL) 
